@@ -5,7 +5,7 @@
     gap: 100px;
 }
 
-.imgContainer{
+.infoContainer{
     flex: 1;
     height: 500px;
     position: relative;
@@ -74,4 +74,20 @@
     font-weight: bold;
     border: none;
     border-radius: 5px;
+}
+
+@media(max-width: 1024px){
+    .container{
+      flex-direction: column;
+    }
+}
+
+@media(max-width: 768px){
+    .container{
+      flex-direction: column;
+    }
+
+    .infoContainer{
+        width: 100%;
+    }
 }

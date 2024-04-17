@@ -1,12 +1,13 @@
+"use client"
 import React from 'react'
 import styles from "./contacts.module.css"
 import Image from 'next/image'
 
 function Contacts() {
+  console.log("it workss here")
   return (
     <div className={styles.container}>
-      <div className={styles.imgContainer}>
-        <Image src="/contacts.jpg" alt="" fill className={styles.img}/>
+      <div className={styles.infoContainer}>
         <div className={styles.contactContainer}>
           <h2>Kontakti</h2>
           <p>
