@@ -4,7 +4,6 @@ import styles from "./contacts.module.css"
 import Image from 'next/image'
 
 function Contacts() {
-  console.log("it workss here")
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
