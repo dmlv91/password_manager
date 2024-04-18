@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import styles from './singlePost.module.css'
 import Image from 'next/image'
+import PostUser from '@/components/postUser/postUser'
 
-function SinglePostPage() {
+const getData = async (slug) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`);
+
+  if (!res.ok) {
+      throw new Error("Something went wrong");
+  }
+
+  return res.json();
+}
+
+async function SinglePostPage({params}) {
+
+  const {slug} = params;
+
+  const post = await getData(slug);
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
@@ -13,7 +28,7 @@ function SinglePostPage() {
           className={styles.img} />
       </div>
       <div className={styles.textContainer}>
-        <h1 className={styles.title}>Title</h1>
+        <h1 className={styles.title}>{post.title}</h1>
         <div className={styles.detail}>
           <Image 
             src='/post2.jpg'
@@ -22,20 +37,16 @@ function SinglePostPage() {
             height={50}
             className={styles.avatar}
           />
-          <div className={styles.detailText}>
-            <span className={styles.detailTitle}>Author</span>
-            <span className={styles.datailValue}>Date</span>
-          </div>
+          <Suspense fallback={<div>Loading....</div>}>
+            <PostUser userId={post.userId} />
+          </Suspense>
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>Published</span>
             <span className={styles.datailValue}>17.04.2024</span>
           </div>
         </div>
         <div className={styles.content}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-          Ipsa eius optio possimus inventore tempore consequuntur 
-          est officiis harum consequatur ratione maxime suscipit, 
-          voluptate ipsum quo porro aut nihil magni ducimus.
+          {post.body}
         </div>
       </div>
     </div>

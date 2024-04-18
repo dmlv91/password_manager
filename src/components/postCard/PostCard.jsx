@@ -3,7 +3,7 @@ import styles from './postCard.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
 
-function PostCard() {
+function PostCard({post}) {
   return (
     <div className={styles.container}>
         <div className={styles.top}>
@@ -13,13 +13,8 @@ function PostCard() {
           <span className={styles.date}>17.04.2024</span>
         </div>
         <div className={styles.bottom}>
-          <h1 className={styles.title}>Nosaukums</h1>
-          <p className={styles.descr}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Totam rerum qui magnam molestiae consectetur corrupti maxime, 
-            ullam quod asperiores aperiam dolore vel architecto illo, 
-            eligendi laborum voluptatem voluptatum quisquam ipsum!
-          </p>
+          <h1 className={styles.title}>{post.title}</h1>
+          <p className={styles.descr}>{post.body}</p>
           <Link className={styles.link} href="/blog/post">Rādīt vairāk</Link>
         </div>
     </div>
