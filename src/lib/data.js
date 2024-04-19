@@ -34,7 +34,7 @@ export const getUsers = async () => {
 export const getUser = async (id) => {
     try{
         dbConnect();
-        const user = await User.findById({id});
+        const user = await User.findById(id);
         return user;
     } catch(err){
         throw new Error("Failed to fetch posts!")

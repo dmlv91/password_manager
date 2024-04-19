@@ -5,8 +5,11 @@ import Footer from '@/components/footer/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Next App',
-  description: 'Next.js starter app',
+  title: {
+    default: "Mana Parole",
+    template: "%s | Mana Parole"
+  },
+  description: 'Digitālās drošības portāls',
 }
 
 export default function RootLayout({ children }) {
