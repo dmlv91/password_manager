@@ -18,6 +18,7 @@ const login = async (credentials) => {
         if (!isPasswordCorrect) {
             throw new Error("Nepareiza parole!")
         }
+        return user;
     } catch (error) {
         console.log(error)
         throw new Error("Autentifikācijas kļūda!")

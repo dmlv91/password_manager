@@ -5,11 +5,11 @@ import { User } from "./models";
 import { dbConnect } from "./utils";
 import bcrypt from "bcryptjs";
 
-export const register = async (formData) => {
+export const register = async (previousState, formData) => {
     const {username,email,password, img, passwordRepeat} = Object.fromEntries(formData);
 
     if (password !== passwordRepeat) {
-        return "Paroles nesakrīt!"
+        return {error : "Paroles nesakrīt!"}
     }
 
     try {
@@ -20,12 +20,12 @@ export const register = async (formData) => {
 
 
         if(user){
-            return "Lietotājvārds eksistē!"
+            return {error: "Lietotājvārds eksistē!"}
             
         }
 
         if (userEmail) {
-            return "Lietotājs ar šādu e-pastu ir reģistrēts!"
+            return {error: "Lietotājs ar šādu e-pastu ir reģistrēts!"}
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -40,10 +40,10 @@ export const register = async (formData) => {
 
         await newUser.save();
         console.log("saved")
-
+        return {success: true};
     }catch(err) {
         console.log(err)
-        return {error: "Something went wrong while registering!"};
+        return {error: "Reģistrācijas kļūda!"};
     }
 }
 
@@ -52,12 +52,9 @@ export const login = async (formData) => {
 
     try {
         await signIn("credentials",{username,password});
-        dbConnect();
-
-
     }catch(err) {
         console.log(err)
-        return {error: "Something went wrong!"};
+        return {error: "Kļūda! Mēģiniet"};
     }
 }
 
