@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from "./vault.module.css"
 
 function passVault() {

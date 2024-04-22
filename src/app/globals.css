@@ -1,10 +1,10 @@
 :root {
-  --bg: white;
-  --textColor: black;
-  --bgSoft: #f0f0f0;
-  --softTextColor: #626262;
-  --btn: #5b6e5b;
-  
+  --bg: #F5F5F5;
+  --textColor: #333333; 
+  --bgSoft: #D3D3D3; 
+  --softTextColor: #757575; 
+  --btn: #5F9F9F;
+  --navbarBg: #CCCCCC;
 }
 
 *{

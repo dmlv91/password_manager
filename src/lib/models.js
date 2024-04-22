@@ -16,18 +16,23 @@ const userSchema = new mongoose.Schema(
             unique: true,
             max: 50
         },
-        // password:{
-        //     type:String,
-        //     required: false,
-        // },
+        password:{
+            type: String,
+            required: false,
+        },
         vault:{
-            type:String,
+            type: String,
+        },
+        master : {
+            type: String,
+            min: 10,
+            required: false,
         },
         img:{
             type: String,
         },
         isAdmin:{
-            type:Boolean,
+            type: Boolean,
             default:false,
         }
     },

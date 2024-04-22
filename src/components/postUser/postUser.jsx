@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './postUser.module.css'
 import Image from 'next/image'
 import { getUser } from '@/lib/data';

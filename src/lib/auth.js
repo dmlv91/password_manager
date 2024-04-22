@@ -1,8 +1,28 @@
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "./utils";
 import { User } from "./models";
+import bcrypt from "bcryptjs";
+
+const login = async (credentials) => {
+    try {
+        dbConnect();
+        const user = await User.findOne({username: credentials.username})
+
+        if(!user) {
+            throw new Error("Nepareizi pieejas dati!")
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
+
+        if (!isPasswordCorrect) {
+            throw new Error("Nepareiza parole!")
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error("Autentifikācijas kļūda!")
+    }
+}
 
 export const {
     handlers: {GET,POST},
@@ -11,18 +31,19 @@ export const {
     signOut,
 } = NextAuth({
     providers: [
-        GitHub({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
-        }),
-        Google({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
-        }),
+        CredentialsProvider({
+            async authorize(credentials) {
+                try {
+                    const user = await login(credentials);
+                    return user;
+                } catch (error) {
+                    return null;
+                }
+            }
+        })
     ],
     callbacks: {
         async signIn({user, account ,profile}) {
-            console.log(profile);
             if(account.provider == "github") {
                 dbConnect();
                 try {

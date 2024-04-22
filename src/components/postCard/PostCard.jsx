@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './postCard.module.css'
 import Image from 'next/image'
 import Link from 'next/link'

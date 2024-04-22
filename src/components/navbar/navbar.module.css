@@ -3,7 +3,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: grey;
+    background-color: var(--navbarBg);
+    border-radius: 5px;
 
 }
 
