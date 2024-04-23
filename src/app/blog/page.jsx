@@ -3,7 +3,7 @@ import Image from 'next/image'
 import PostCard from '@/components/postCard/PostCard'
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/blog", {next:{revalidate:3600}});
+  const res = await fetch("http://localhost:3000/api/blog", {cache: 'no-store'});
 
   if(!res.ok) {
     throw new Error("Something wrong")

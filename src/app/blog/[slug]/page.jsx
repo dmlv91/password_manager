@@ -49,7 +49,7 @@ async function SinglePostPage({params}) {
           )}
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>Published</span>
-            <span className={styles.datailValue}>{post.createdAt.toString().slice(4,16)}</span>
+            <span className={styles.datailValue}>{post.createdAt.toString().slice(0,10)}</span>
           </div>
         </div>
         <div className={styles.content}>

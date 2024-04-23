@@ -6,6 +6,7 @@ import { dbConnect } from "./utils";
 import bcrypt from "bcryptjs";
 import {revalidatePath} from "next/cache";
 
+
 export const register = async (previousState, formData) => {
     const {username,email,password, img, passwordRepeat} = Object.fromEntries(formData);
 
@@ -49,17 +50,20 @@ export const register = async (previousState, formData) => {
 }
 
 export const addPost = async (previousState,formData) => {
-    console.log(formData)
-    const {title,descr,slug,userId,img} = Object.fromEntries(formData);
-
+    var uploadImg = "/no-image.png"
+    if (formData.img !== null) {
+        uploadImg = formData.img
+    } else {
+    
+    }
     try {
         dbConnect();
         const newPost = new Post({
-            title,
-            descr,
-            slug,
-            userId,
-            img,
+            title: formData.title,
+            descr: formData.descr,
+            slug: formData.slug,
+            userId: formData.userId,
+            img: uploadImg,
         });
         await newPost.save();
         console.log("saved")
