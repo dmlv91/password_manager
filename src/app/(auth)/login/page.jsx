@@ -1,15 +1,14 @@
-import { login } from '@/lib/actions'
-import { auth, signIn } from '@/lib/auth'
+import LoginForm from '@/components/loginForm/loginForm'
+import styles from "./login.module.css"
 
-async function Login() {
+
+function Login() {
 
   return (
-    <div>
-      <form action={login}>
-        <input type="text" name="username" placeholder="lietotājvārds" />
-        <input type="password" name="password" placeholder="parole" />
-        <button>Ienākt</button>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <LoginForm/>
+      </div>
     </div>
   )
 }

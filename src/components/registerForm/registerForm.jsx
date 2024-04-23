@@ -3,7 +3,7 @@ import { register } from "@/lib/actions";
 import styles from "./registerForm.module.css"
 import {useFormState} from "react-dom";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function RegisterForm() {

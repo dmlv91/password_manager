@@ -1,9 +1,10 @@
 "use server";
 
 import { signIn, signOut } from "./auth";
-import { User } from "./models";
+import { Post, User } from "./models";
 import { dbConnect } from "./utils";
 import bcrypt from "bcryptjs";
+import {revalidatePath} from "next/cache";
 
 export const register = async (previousState, formData) => {
     const {username,email,password, img, passwordRepeat} = Object.fromEntries(formData);
@@ -47,14 +48,70 @@ export const register = async (previousState, formData) => {
     }
 }
 
-export const login = async (formData) => {
+export const addPost = async (previousState,formData) => {
+    console.log(formData)
+    const {title,descr,slug,userId,img} = Object.fromEntries(formData);
+
+    try {
+        dbConnect();
+        const newPost = new Post({
+            title,
+            descr,
+            slug,
+            userId,
+            img,
+        });
+        await newPost.save();
+        console.log("saved")
+        revalidatePath("/blog")
+    }catch(err) {
+        console.log(err)
+        return {error: "Kļūda!"};
+    }
+}
+
+export const deletePost = async (formData) => {
+    const { id } = Object.fromEntries(formData);
+  
+    try {
+      dbConnect();
+      await Post.findByIdAndDelete(id);
+      console.log(`Post with id=${id} deleted from db`);
+      revalidatePath("/blog");
+      revalidatePath("/admin");
+    } catch (err) {
+      console.log(err);
+      return { error: "Kļūda!" };
+    }
+};
+
+export const deleteUser = async (formData) => {
+    const { id } = Object.fromEntries(formData);
+  
+    try {
+      connectToDb();
+      await User.findByIdAndDelete(id);
+      console.log(`User with id=${id} deleted from db`);
+      revalidatePath("/");
+    } catch (err) {
+      console.log(err);
+      return { error: "Something went wrong!" };
+    }
+  };
+
+export const login = async (previousState,formData) => {
     const {username,password} = Object.fromEntries(formData);
 
     try {
         await signIn("credentials",{username,password});
     }catch(err) {
         console.log(err)
-        return {error: "Kļūda! Mēģiniet"};
+
+        if(err.message.includes("CredentialsSignin")) {
+            return {error: "Nepareizs lietotājvārds vai parole!"}
+        }
+
+        throw err;
     }
 }
 
