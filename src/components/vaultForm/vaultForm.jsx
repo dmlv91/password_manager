@@ -1,8 +1,11 @@
 import styles from "./vaultForm.module.css"
 
 
-export const VaultForm = () => {
+export const VaultForm = (params) => {
+  console.log(params)
   return (
-    <div>vaultForm</div>
+    <div className={styles.container}>
+      VAULT
+    </div>
   )
 }

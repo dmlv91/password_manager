@@ -9,7 +9,7 @@ async function Navbar() {
   return (
     <div>
         <div className={styles.container}>
-            <Link href="/" className={styles.logo}>Logo</Link>
+            <Link href="/" className={styles.logo}>Mana Parole</Link>
             
             <Links session={session}/>
         </div>

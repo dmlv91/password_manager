@@ -49,7 +49,7 @@ const AdminPostForm = ({userId}) => {
         <h1>Pievienot jaunu ierakstu</h1>
         <input type="hidden" name="userId" value={userId}/>
         <input type="text" name="title" placeholder="Virsraksts" onChange={handleInputChange}/>
-        <input type="text" name="slug" placeholder="Raksta tags" value={formData.slug} onChange={handleInputChange}/>
+        <input type="text" name="slug" placeholder="URL" value={formData.slug} onChange={handleInputChange}/>
         <input type="file" name="img" accept="image/*" onChange={handleFileChange}/>
         <textarea type="text" name="descr" placeholder="Apraksts" rows={10} onChange={handleInputChange}/>
         <button>Ievietot</button>

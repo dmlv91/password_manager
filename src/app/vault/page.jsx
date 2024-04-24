@@ -10,9 +10,14 @@ async function PassVault() {
   const session = await auth();
   const userId = session.user.id;
   const user = await getUser(userId);
+  const vault = user.vault;
+  const params = {
+    userId : userId,
+    vault : vault,
+  }
   var hasVault = false
 
-  if (user.vault) {
+  if (vault) {
     hasVault = true
   }
 
@@ -20,10 +25,10 @@ async function PassVault() {
     <div className={styles.container}>
       {hasVault ? (
         <Suspense fallback={<div>Loading...</div>}>
-          <VaultForm />
+          <VaultForm params={params}/>
         </Suspense>
       ) : (
-        <VaultModal />
+        <VaultModal userId={userId}/>
       )}
     </div>
   );

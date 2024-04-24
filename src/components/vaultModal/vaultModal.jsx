@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./vaultModal.module.css"
 import { addVault } from "@/lib/actions";
 
-const VaultModal = () => {
+const VaultModal = (userId) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [masterPassword, setMasterPassword] = useState('');
@@ -16,7 +16,7 @@ const VaultModal = () => {
         e.preventDefault();
         try {
             
-            const res = await addVault(masterPassword);
+            const res = await addVault(userId,masterPassword);
         } catch (error) {
             console.log(error)
         }

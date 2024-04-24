@@ -1,5 +1,6 @@
 "use server";
 
+import mongoose from "mongoose";
 import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { dbConnect } from "./utils";
@@ -94,12 +95,12 @@ export const deletePost = async (formData) => {
     }
 };
 
-export const addVault = async (master) => {
-    // const { master } = formData
-  
+export const addVault = async (userId,master) => {
+    const id = userId.userId
+    const vault = "vaultString"
     try {
       dbConnect();
-    //   await User.findByIdAndDelete(id);
+      await User.updateOne({_id : id}, {$set : {master : master, vault : vault}});
       console.log(`Master password ${master} added!`);
       revalidatePath("/vault");
     } catch (err) {
