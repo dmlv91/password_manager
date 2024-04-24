@@ -8,12 +8,17 @@ import {revalidatePath} from "next/cache";
 
 
 export const register = async (previousState, formData) => {
-    const {username,email,password, img, passwordRepeat} = Object.fromEntries(formData);
-
+    const {username,email,password, img, passwordRepeat} = formData;
+    var uploadImg;
     if (password !== passwordRepeat) {
         return {error : "Paroles nesakrīt!"}
     }
 
+    if (img !== null) {
+        uploadImg = img
+    } else {
+        uploadImg = "/no-avatar.png"
+    }
     try {
 
         dbConnect();
@@ -37,7 +42,7 @@ export const register = async (previousState, formData) => {
             username,
             email,
             password: hashedPass,
-            img,
+            img : uploadImg,
         });
 
         await newUser.save();
@@ -66,7 +71,7 @@ export const addPost = async (previousState,formData) => {
             img: uploadImg,
         });
         await newPost.save();
-        console.log("saved")
+        return {success: true};
         revalidatePath("/blog")
     }catch(err) {
         console.log(err)
@@ -89,11 +94,26 @@ export const deletePost = async (formData) => {
     }
 };
 
+export const addVault = async (master) => {
+    // const { master } = formData
+  
+    try {
+      dbConnect();
+    //   await User.findByIdAndDelete(id);
+      console.log(`Master password ${master} added!`);
+      revalidatePath("/vault");
+    } catch (err) {
+      console.log(err);
+      return { error: "Something went wrong!" };
+    }
+  };
+
+
 export const deleteUser = async (formData) => {
     const { id } = Object.fromEntries(formData);
   
     try {
-      connectToDb();
+      dbConnect();
       await User.findByIdAndDelete(id);
       console.log(`User with id=${id} deleted from db`);
       revalidatePath("/");

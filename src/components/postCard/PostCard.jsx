@@ -21,7 +21,7 @@ function PostCard({post}) {
         </div>
         <div className={styles.bottom}>
           <h1 className={styles.title}>{post.title}</h1>
-          <p className={styles.descr}>{post.descr}</p>
+          <p className={styles.descr}>{post.descr.slice(0,150)+"..."}</p>
           <Link className={styles.link} href={`/blog/${post.slug}`}>Rādīt vairāk</Link>
         </div>
     </div>
