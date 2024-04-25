@@ -5,8 +5,11 @@ import {useFormState} from "react-dom";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import bcrypt from "bcryptjs";
+import validator from "validator";
 
 function RegisterForm() {
+  
     const [state,formAction] = useFormState(register,undefined);
     const [formData, setFormData] = useState({
       name: '',
@@ -18,7 +21,28 @@ function RegisterForm() {
 
     const handleInputChange = (e) => {
       const {name,value} = e.target;
+      if (name == "password") {
+        validate(value)
+      }
+      if (name == "passwordRepeat") {
+        if (!validator.equals(value,formData.password)) {
+          setErrorMessage("Paroles nesakrīt!")
+        } else {
+          setErrorMessage("")
+        }
+      }
       setFormData({...formData, [name]: value});
+    }
+
+    const [errorMessage, setErrorMessage] = useState('')
+    const validate = (value) => {
+      if (!validator.isStrongPassword(value, {
+        minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers : 1, minSymbols :1
+      })) {
+        setErrorMessage("Parole, nav pietiekami droša!")
+      } else {
+        setErrorMessage("Droša parole")
+      }
     }
 
     const handleFileChange = (e) => {
@@ -48,6 +72,7 @@ function RegisterForm() {
         <input type='password' placeholder='Parole atkārtoti' name='passwordRepeat' onChange={handleInputChange}/>
         <button>Register</button>
         {state?.error}
+        <span>{errorMessage}</span>
         <Link href="/login">Esat reģistrējies? <b>Ienākt</b></Link>
     </form>
   )
