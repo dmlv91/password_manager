@@ -15,15 +15,10 @@ async function PassVault() {
     userId : userId,
     vault : vault,
   }
-  var hasVault = false
-
-  if (vault) {
-    hasVault = true
-  }
 
   return (
     <div className={styles.container}>
-      {hasVault ? (
+      {vault ? (
         <Suspense fallback={<div>Loading...</div>}>
           <VaultForm params={params}/>
         </Suspense>

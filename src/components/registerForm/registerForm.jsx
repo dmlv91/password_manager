@@ -4,45 +4,73 @@ import styles from "./registerForm.module.css"
 import {useFormState} from "react-dom";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { FaExclamationCircle } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 import Link from "next/link";
-import bcrypt from "bcryptjs";
-import validator from "validator";
 
 function RegisterForm() {
-  
+    const lower = new RegExp('(?=.*[a-z])');
+    const upper = new RegExp('(?=.*[A-Z])');
+    const number = new RegExp('(?=.*[0-9])');
+    const special = new RegExp('(?=.*[!@#\$%\^&\*])');
+    const length = new RegExp('(?=.{10,})')
     const [state,formAction] = useFormState(register,undefined);
     const [formData, setFormData] = useState({
       name: '',
       email: '',
       password: '',
-      passwordRepeat: '',
       img: null,
     });
+    const [lowerValidated, setLowerValidated]=useState(false);
+    const [upperValidated, setUpperValidated]=useState(false);
+    const [numberValidated, setNumberValidated]=useState(false);
+    const [specialValidated, setSpecialValidated]=useState(false);
+    const [lengthValidated, setLengthValidated]=useState(false);
+    const [equalValidated,setEqualValidated] = useState(false);
+    const [validated,setValidated] = useState(false);
 
     const handleInputChange = (e) => {
       const {name,value} = e.target;
       if (name == "password") {
-        validate(value)
+        if(lower.test(value)){
+            setLowerValidated(true);
+          }
+          else{
+            setLowerValidated(false);
+          }
+          if(upper.test(value)){
+            setUpperValidated(true);
+          }
+          else{
+            setUpperValidated(false);
+          }
+          if(number.test(value)){
+            setNumberValidated(true);
+          }
+          else{
+            setNumberValidated(false);
+          }
+          if(special.test(value)){
+            setSpecialValidated(true);
+          }
+          else{
+            setSpecialValidated(false);
+          }
+          if(length.test(value)){
+            setLengthValidated(true);
+          }
+          else{
+            setLengthValidated(false);
+          }
       }
       if (name == "passwordRepeat") {
-        if (!validator.equals(value,formData.password)) {
-          setErrorMessage("Paroles nesakrīt!")
+        if (value === formData.password) {
+          setEqualValidated(true)
         } else {
-          setErrorMessage("")
+          setEqualValidated(false)
         }
       }
       setFormData({...formData, [name]: value});
-    }
-
-    const [errorMessage, setErrorMessage] = useState('')
-    const validate = (value) => {
-      if (!validator.isStrongPassword(value, {
-        minLength: 10, minLowercase: 1, minUppercase: 1, minNumbers : 1, minSymbols :1
-      })) {
-        setErrorMessage("Parole, nav pietiekami droša!")
-      } else {
-        setErrorMessage("Droša parole")
-      }
     }
 
     const handleFileChange = (e) => {
@@ -63,6 +91,12 @@ function RegisterForm() {
     useEffect(() => {
         state?.success && router.push("/login");
     }, [state?.success,router]);
+
+    useEffect(() => {
+        const isValid = lowerValidated && upperValidated && numberValidated && specialValidated && lengthValidated && equalValidated;
+        setValidated(isValid);
+      }, [lowerValidated, upperValidated, numberValidated, specialValidated, lengthValidated, equalValidated]);
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
         <input type='text' placeholder='Lietotājvārds' name='username' onChange={handleInputChange}/>
@@ -70,9 +104,86 @@ function RegisterForm() {
         <input type="file" name="img" accept="image/*" onChange={handleFileChange}/>
         <input type='password' placeholder='Parole' name='password'onChange={handleInputChange}/>
         <input type='password' placeholder='Parole atkārtoti' name='passwordRepeat' onChange={handleInputChange}/>
-        <button>Register</button>
-        {state?.error}
-        <span>{errorMessage}</span>
+        <main className={styles.tracker}>
+          <div className={lowerValidated?styles.validated : styles.notValidated}>
+            {lowerValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Vismaz viens mazais burts
+          </div>
+          <div className={upperValidated?styles.validated : styles.notValidated}>
+            {upperValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Vismaz viens lielais burts
+          </div>
+          <div className={numberValidated?styles.validated : styles.notValidated}>
+            {numberValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Vismaz viens cipars
+          </div>
+          <div className={specialValidated?styles.validated : styles.notValidated}>
+            {specialValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Vismaz viens speciālais simbols
+          </div>
+          <div className={lengthValidated?styles.validated : styles.notValidated}>
+            {lengthValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Vismaz 10 rakstzīmes
+          </div>
+          <div className={equalValidated?styles.validated : styles.notValidated}>
+            {equalValidated?(
+              <span className={styles.iconGreen}>
+                <FaCheckCircle/>  
+              </span>
+            ):(
+              <span className={styles.iconRegular}>
+                <FaExclamationCircle/>  
+              </span>
+            )}
+            Paroles sakrīt
+          </div>
+        </main>
+        {validated?(
+            <button className={styles.btn}>Reģistrēties</button>
+        ) : (
+            <button className={styles.btnInactive}>Reģistrēties</button>
+        )}
+        {state && state.error}
         <Link href="/login">Esat reģistrējies? <b>Ienākt</b></Link>
     </form>
   )

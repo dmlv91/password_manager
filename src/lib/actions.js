@@ -1,6 +1,4 @@
 "use server";
-
-import mongoose from "mongoose";
 import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { dbConnect } from "./utils";
@@ -9,46 +7,37 @@ import {revalidatePath} from "next/cache";
 
 
 export const register = async (previousState, formData) => {
-    const {username,email,password, img, passwordRepeat} = formData;
+    const {username,email,password, img} = formData;
     var uploadImg;
-    if (password !== passwordRepeat) {
-        return {error : "Paroles nesakrīt!"}
-    }
 
     if (img !== null) {
         uploadImg = img
     } else {
         uploadImg = "/no-avatar.png"
     }
-    try {
 
+    try {
         dbConnect();
         const user = await User.findOne({username});
         const userEmail = await User.findOne({email});
-
-
         if(user){
             return {error: "Lietotājvārds eksistē!"}
             
         }
-
         if (userEmail) {
             return {error: "Lietotājs ar šādu e-pastu ir reģistrēts!"}
         }
-
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password,salt);
-        
         const newUser = new User({
             username,
             email,
             password: hashedPass,
             img : uploadImg,
         });
-
         await newUser.save();
         console.log("saved")
-        return {success: true};
+        return "Reģistrācija veiksmīga!";
     }catch(err) {
         console.log(err)
         return {error: "Reģistrācijas kļūda!"};
