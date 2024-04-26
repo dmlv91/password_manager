@@ -1,0 +1,48 @@
+.form{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+}
+
+.form h2{
+    color: var(--textColor);
+    font-weight: bold;
+}
+
+.form input{
+    padding: 20px;
+    background-color: var(--bg);
+    color: var(--textColor);
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+
+.tracker{
+background-color: var(--bgSoft);
+font-size: 14px;
+color: var(--textColor);
+letter-spacing: 0.09em;
+border-radius: 5px;
+margin-top: 5px;
+}
+
+.tracker div{
+margin: 5px 0;
+}
+
+.tracker .validated{
+color: rgba(5, 58, 33, 0.5);
+font-weight: bold;
+}
+
+.iconRegular{
+margin-right: 10px;
+}
+
+.iconGreen{
+color: green;
+margin-right: 10px;
+}

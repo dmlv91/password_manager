@@ -1,7 +1,8 @@
 "use client"
 import { useState } from "react";
 import styles from "./vaultModal.module.css"
-import { addVault } from "@/lib/actions";
+import { createVault } from "@/lib/actions";
+import { FaRegWindowClose } from "react-icons/fa";
 
 const VaultModal = (userId) => {
 
@@ -16,35 +17,36 @@ const VaultModal = (userId) => {
         e.preventDefault();
         try {
             
-            const res = await addVault(userId,masterPassword);
+            const res = await createVault(userId,masterPassword);
         } catch (error) {
             console.log(error)
         }
-        // Close the modal after submitting
         setIsModalOpen(false);
-        // Reset master password field
         setMasterPassword('');
     };
   return (
     <div className={styles.container}>
-        <button className={styles.ddBtn} onClick={handleAddVaultClick}>ADD VAULT</button>
+        <button className={styles.btn} onClick={handleAddVaultClick}>ADD VAULT</button>
         {isModalOpen && (
             <div className={styles.modal}>
-            <div className={styles.modalContent}>
-                <span onClick={() => setIsModalOpen(false)} className={styles.close}>&times;</span>
-                <h2>Add Vault</h2>
-                <form onSubmit={handleSubmit}>
-                <label htmlFor="masterPassword">Master Password:</label>
-                <input
-                    type="password"
-                    id="masterPassword"
-                    value={masterPassword}
-                    onChange={(e) => setMasterPassword(e.target.value)}
-                />
-                <button type="submit">Submit</button>
-                </form>
+                <div className={styles.modalContent}>
+                    <span onClick={() => setIsModalOpen(false)} className={styles.close}>
+                        <FaRegWindowClose/>
+                    </span>
+                    <form onSubmit={handleSubmit}>
+                    <label htmlFor="masterPassword">Master Password:</label>
+                    <input
+                        type="text"
+                        id="masterPassword"
+                        value={masterPassword}
+                        onChange={(e) => setMasterPassword(e.target.value)}
+                    />
+                    <button className={styles.btn} type="submit">Submit</button>
+                    </form>
+                </div>
+                <h3>Padoms: Izmantojiet drošu paroli, taču atšķirīgu no jūsu konta paroles!</h3>
             </div>
-            </div>
+
         )}
     </div>
   )

@@ -2,7 +2,7 @@
 import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { dbConnect } from "./utils";
-import bcrypt from "bcryptjs";
+import argon2 from "argon2";
 import {revalidatePath} from "next/cache";
 
 
@@ -27,8 +27,7 @@ export const register = async (previousState, formData) => {
         if (userEmail) {
             return {error: "Lietotājs ar šādu e-pastu ir reģistrēts!"}
         }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPass = await bcrypt.hash(password,salt);
+        const hashedPass = await argon2.hash(password)
         const newUser = new User({
             username,
             email,
@@ -36,8 +35,7 @@ export const register = async (previousState, formData) => {
             img : uploadImg,
         });
         await newUser.save();
-        console.log("saved")
-        return "Reģistrācija veiksmīga!";
+        return {success: true}
     }catch(err) {
         console.log(err)
         return {error: "Reģistrācijas kļūda!"};
@@ -84,13 +82,13 @@ export const deletePost = async (formData) => {
     }
 };
 
-export const addVault = async (userId,master) => {
+export const createVault = async (userId,master) => {
     const id = userId.userId
-    const vault = "vaultString"
+    const vault = []
+    const masterHash = await argon2.hash(master)
     try {
       dbConnect();
-      await User.updateOne({_id : id}, {$set : {master : master, vault : vault}});
-      console.log(`Master password ${master} added!`);
+      await User.updateOne({_id : id}, {$set : {master : masterHash, vault : vault}});
       revalidatePath("/vault");
     } catch (err) {
       console.log(err);

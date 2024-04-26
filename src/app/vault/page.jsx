@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { VaultForm } from "@/components/vaultForm/vaultForm";
 import VaultModal from "@/components/vaultModal/vaultModal";
 import { Suspense } from "react";
+import PassCheckForm from "@/components/passCheckForm/passCheckForm";
+import PassGenerator from "@/components/passGenerator/passGenerator";
 
 async function PassVault() {
   
@@ -18,13 +20,21 @@ async function PassVault() {
 
   return (
     <div className={styles.container}>
-      {vault ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <VaultForm params={params}/>
-        </Suspense>
-      ) : (
-        <VaultModal userId={userId}/>
-      )}
+      <div className={styles.row}>
+        <div className={styles.col}>
+          <PassCheckForm/>
+          <PassGenerator/>
+        </div>
+        <div className={styles.col}>
+          {vault ? (
+            <Suspense fallback={<div>Loading.....</div>}>
+              <VaultForm params={params}/>
+            </Suspense>
+          ) : (
+            <VaultModal userId={userId}/>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ const LoginForm = () => {
             <input type="text" name="username" placeholder="lietotājvārds" />
             <input type="password" name="password" placeholder="parole" />
             <button>Ienākt</button>
-            {state?.error}
+            <span className={styles.error}>{state?.error}</span>
             <Link href="/register">Neesat reģistrēts? <b>Reģistrēties</b></Link>
         </form>
   )

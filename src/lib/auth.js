@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "./utils";
 import { User } from "./models";
+import argon2 from "argon2";
 import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
 const login = async (credentials) => {
@@ -13,7 +14,7 @@ const login = async (credentials) => {
             throw new Error("Nepareizi pieejas dati!")
         }
 
-        const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
+        const isPasswordCorrect = await argon2.verify(user.password, credentials.password);
 
         if (!isPasswordCorrect) {
             throw new Error("Nepareiza parole!")
