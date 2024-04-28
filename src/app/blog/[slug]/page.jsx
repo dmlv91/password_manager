@@ -25,10 +25,7 @@ export const generateMetadata = async({params}) => {
 
 
 async function SinglePostPage({params}) {
-
   const {slug} = params;
-
-  // const post = await getPost(slug);
   const post = await getData(slug)
   return (
     <div className={styles.container}>

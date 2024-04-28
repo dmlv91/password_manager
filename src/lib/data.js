@@ -40,3 +40,14 @@ export const getUser = async (id) => {
         throw new Error("Failed to fetch posts!")
     }
 }
+
+export const getVault =async(id) => {
+    try {
+        dbConnect();
+        const user = await User.findById(id);
+        return user.vault;
+    } catch (error) {
+        console.log(error)
+        throw new Error("Failed to fetch vault!")
+    }
+}

@@ -84,7 +84,7 @@ export const deletePost = async (formData) => {
 
 export const createVault = async (userId,master) => {
     const id = userId.userId
-    const vault = []
+    const vault = ""
     const masterHash = await argon2.hash(master)
     try {
       dbConnect();
@@ -96,6 +96,16 @@ export const createVault = async (userId,master) => {
     }
   };
 
+export const saveVault = async (id,encryptedVault) => {
+    try {
+        dbConnect();
+        await User.updateOne({_id : id}, {$set : {vault : encryptedVault}});
+        return {success: true};
+    } catch (error) {
+        console.log(error)
+        return {error : "Glabātuves ievietošana datubāzē neveiksmīga!"}
+    }
+}
 
 export const deleteUser = async (formData) => {
     const { id } = Object.fromEntries(formData);
