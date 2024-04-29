@@ -15,6 +15,7 @@ const getData = async (slug) => {
 }
 
 const postData = async(data) => {
+  console.log(data)
   try {
     const res = await fetch(`http://localhost:3000/api/vault/${data.userId}`, {
       method: 'POST',
@@ -28,12 +29,11 @@ const postData = async(data) => {
       throw new Error("Something wrong")
     }
 
-    const resData = await res.json();
+    return res.json();
   } catch (error) {
     console.log(error)
   }
 };
-
 
 export const VaultForm = (id) => {
   const {userId} = id;
@@ -48,63 +48,66 @@ export const VaultForm = (id) => {
     control,
     name: "vault"
   });
-  console.log(fields)
-  // const mutation  = useMutation(saveVault(userId, vault));
-  var vault = getData(userId)
 
-  // postData({userId: userId, master: master, vault: vault});
+  var vault = getData(userId)
   return (
-    <div className={styles.container} onSubmit={handleSubmit(({vault}) => {
-      console.log({vault});
-      
-    })}>
+    <form className={styles.container} onSubmit={(e) => {
+      e.preventDefault();
+      handleSubmit(({vault}) => {
+        console.log({vault});
+      })
+    }}>
       {fields.map((field,index) => {
         return (
           <div className={styles.vaultEntry} key={field.id}>
-            <form>
-            <label htmlFor="website">Website</label>
-              <input 
-                type="url"
-                id="website"
-                placeholder="Vietne"
-                {...register(`vault.${index}.website`, {
-                  required: "Website is required",
-                })}
-                />
-            </form>
-            <form>
-            <label htmlFor="username">Username</label>
-              <input 
-                type="text"
-                id="username"
-                placeholder="Lietotājvārds"
-                {...register(`vault.${index}.username`, {
-                  required: "Username is required",
-                })}
-                />
-            </form>
-            <form>
-              <label htmlFor="password">Password</label>
-              <input 
-                type="password"
-                id="password"
-                placeholder="Parole"
-                {...register(`vault.${index}.password`, {
-                  required: "Password is required",
-                })}
-                />
-            </form>
-            <button className={styles.remBtn} onClick={() => remove(index)}>-</button>
-          </div>
+            <div className={styles.inputWrapper}>
+              <div>
+                <label htmlFor="website">Vietne</label>
+                <input 
+                  type="url"
+                  id="website"
+                  placeholder="Vietne"
+                  {...register(`vault.${index}.website`, {
+                    required: "Website is required",
+                  })}
+                  />
+              </div>
+              <div>
+                <label htmlFor="username">Lietotājvārds</label>
+                <input 
+                  type="text"
+                  id="username"
+                  placeholder="Lietotājvārds"
+                  {...register(`vault.${index}.username`, {
+                    required: "Username is required",
+                  })}
+                  />
+              </div>
+              <div>
+                <label htmlFor="password">Parole</label>
+                <input 
+                  type="text"
+                  id="password"
+                  placeholder="Parole"
+                  {...register(`vault.${index}.password`, {
+                    required: "Password is required",
+                  })}
+                  />
+              </div> 
+              <button className={styles.remBtn} onClick={() => remove(index)}>-</button>
+            </div>
+              </div>
         );
       })}
       <button className={styles.addBtn} onClick={() => append({website : "", username : "", password : ""})}>
         Pievienot
       </button>
-
-      <button className={styles.saveBtn} type="submit">
+      {vault ? (<button className={styles.saveBtn} onClick={handleSubmit(({vault}) => {
+        postData({userId: userId, vault : vault})
+      })}>
         Saglabāt
-      </button>
-    </div>
+      </button>) : (<div></div>)}
+      
+    </form>
   )
 }

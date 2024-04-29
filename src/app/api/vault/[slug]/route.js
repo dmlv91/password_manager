@@ -15,7 +15,8 @@ export const GET = async (request, {params}) => {
 }
 
 export const POST = async (req) => {
-    const {userId, master, vault} = await req.json();
+    const {userId,vault} = await req.json();
+    console.log(userId,vault)
     try {
         dbConnect();
         const user = await User.findById(userId)

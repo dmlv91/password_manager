@@ -1,0 +1,61 @@
+.container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    background-color: var(--bgSoft);
+    color: var(--textColor);
+    border-radius: 5px;
+}
+  
+.vaultEntry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vaultEntry label {
+    margin-right: 10px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.vaultEntry input {
+    padding: 10px;
+    background-color: var(--bg);
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    color: var(--textColor);
+}
+
+.remBtn {
+    padding: 10px;
+    background-color: #A93232;
+    color: var(--textColor);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.addBtn,
+.saveBtn {
+    padding: 5px;
+    background-color: var(--btn);
+    color: var(--textColor);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+}
