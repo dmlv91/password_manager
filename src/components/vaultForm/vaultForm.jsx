@@ -4,44 +4,40 @@ import styles from "./vaultForm.module.css"
 import { useMutation } from "react-query"
 import { saveVault } from "@/lib/actions"
 
-export const VaultForm = async (params) => {
-  console.log(params)
-  const vault = params.params.vault;
-  const master = params.params.master;
-  const userId = params.params.userId;
+const getData = async (slug) => {
+  const res = await fetch(`http://localhost:3000/api/vault/${slug}`);
 
-  const getData = async (slug) => {
-    const res = await fetch(`http://localhost:3000/api/vault/${slug}`);
-  
-    if(!res.ok) {
-      throw new Error("Something wrong")
-    }
-  
-    return res.json();
+  if(!res.ok) {
+    throw new Error("Something wrong")
   }
 
-  const postData = async(data) => {
-    try {
-      const res = await fetch('http://localhost:3000/api/vault', {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+  return res.json();
+}
 
-      if (!res.ok) {
-        throw new Error("Something wrong")
-      }
+const postData = async(data) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/vault/${data.userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
-      const resData = await res.json();
-      console.log(resData)
-    } catch (error) {
-      console.log(error)
+    if (!res.ok) {
+      throw new Error("Something wrong")
     }
-  };
+
+    const resData = await res.json();
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 
+export const VaultForm = (id) => {
+  const {userId} = id;
+ 
   const {control, register, handleSubmit} = useForm({
     defaultValues: {
       vault,
@@ -52,12 +48,11 @@ export const VaultForm = async (params) => {
     control,
     name: "vault"
   });
-
+  console.log(fields)
   // const mutation  = useMutation(saveVault(userId, vault));
-  var test = getData(userId)
-  console.log("Test", test)
+  var vault = getData(userId)
 
-  postData(params);
+  // postData({userId: userId, master: master, vault: vault});
   return (
     <div className={styles.container} onSubmit={handleSubmit(({vault}) => {
       console.log({vault});

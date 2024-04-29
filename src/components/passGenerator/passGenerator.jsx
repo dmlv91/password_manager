@@ -13,17 +13,66 @@ const PassGenerator = () => {
     const [successMessage, setSuccessMessage] = useState("");
  
     const generatePassword = () => {
+        const lower = new RegExp('(?=.*[a-z])');
+        const upper = new RegExp('(?=.*[A-Z])');
+        const number = new RegExp('(?=.*[0-9])');
+        const special = new RegExp('(?=.*[!()@#\$%\^&\*])');
+        const length = new RegExp('(?=.{10,})')
         let charset = "";
         let newPassword = "";
+        let passwordCompatbile = false;
  
         if (useSymbols) charset += "!@#$%^&*()";
         if (useNumbers) charset += "0123456789";
         if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
         if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
- 
-        for (let i = 0; i < passwordLength; i++) {
-            newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+        
+        while (!passwordCompatbile) {
+            newPassword = ""
+            for (let i = 0; i < passwordLength; i++) {
+                newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            if (useSymbols) {
+                if (special.test(newPassword)) {
+                    passwordCompatbile = true
+                } else {
+                    passwordCompatbile = false
+                    return
+                }
+            }
+            if (useNumbers) {
+                if (number.test(newPassword)) {
+                    passwordCompatbile = true
+                } else {
+                    passwordCompatbile = false
+                    return
+                }
+            }
+            if (useLowerCase) {
+                if (lower.test(newPassword)) {
+                    passwordCompatbile = true
+                } else {
+                    passwordCompatbile = false
+                    return
+                }
+            }
+            if (useUpperCase) {
+                if (upper.test(newPassword)) {
+                    passwordCompatbile = true
+                } else {
+                    passwordCompatbile = false
+                    return
+                }
+            }
+          
+            if (length.test(newPassword)) {
+                passwordCompatbile = true
+            } else {
+                passwordCompatbile = false
+                return
+            }
         }
+        
  
         setPassword(newPassword);
     };
@@ -35,7 +84,7 @@ const PassGenerator = () => {
         el.select();
         document.execCommand("copy");
         document.body.removeChild(el);
-        setSuccessMessage("Password copied to clipboard!");
+        setSuccessMessage("Parole nokopēta!");
         setTimeout(() => setSuccessMessage(""), 2000);
         // Hide message after 2 seconds
     };

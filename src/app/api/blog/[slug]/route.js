@@ -3,7 +3,6 @@ import { dbConnect } from "@/lib/utils"
 import { NextResponse } from "next/server";
 
 export const GET = async (request,{params}) => {
-    console.log(params)
     const {slug} = params;
     try {
         dbConnect();

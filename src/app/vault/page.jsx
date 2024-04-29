@@ -12,13 +12,8 @@ async function PassVault() {
   const session = await auth();
   const userId = session.user.id;
   const user = await getUser(userId);
-  const vault = user.vault;
   const master = user?.master
-  const params = {
-    userId : userId,
-    vault : vault,
-    master : master
-  }
+  
 
   return (
     <div className={styles.container}>
@@ -30,7 +25,7 @@ async function PassVault() {
         <div className={styles.col}>
           {master ? (
             <Suspense fallback={<div>Loading.....</div>}>
-              <VaultForm params={params}/>
+              <VaultForm userId={userId}/>
             </Suspense>
           ) : (
             <VaultModal userId={userId}/>

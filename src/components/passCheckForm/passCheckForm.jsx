@@ -12,7 +12,7 @@ const PassCheckForm = () => {
     const lower = new RegExp('(?=.*[a-z])');
     const upper = new RegExp('(?=.*[A-Z])');
     const number = new RegExp('(?=.*[0-9])');
-    const special = new RegExp('(?=.*[!@#\$%\^&\*])');
+    const special = new RegExp('(?=.*[!()@#\$%\^&\*])');
     const length = new RegExp('(?=.{10,})')
     const [lowerValidated, setLowerValidated]=useState(false);
     const [upperValidated, setUpperValidated]=useState(false);
@@ -54,10 +54,15 @@ const PassCheckForm = () => {
             }
     }
 
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+      }
+    }
   return (
     <form className={styles.form}>
         <h2>Pārbaudīt paroles atbilstību drošas paroles kritērijiem:</h2>
-        <input type='text' placeholder='Parole' name='password'onChange={handleInputChange}/>
+        <input type='text' placeholder='Parole' name='password'onChange={handleInputChange} onKeyDown={handleKeyDown}/>
         <main className={styles.tracker}>
           <div className={lowerValidated?styles.validated : styles.notValidated}>
             {lowerValidated?(
