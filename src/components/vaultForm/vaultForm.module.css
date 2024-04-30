@@ -59,3 +59,39 @@
     font-size: 15px;
     margin-top: 10px;
 }
+
+.modal {
+    margin-top: 10px;
+}
+
+.modal input {
+    margin-right: 10px;
+    padding: 10px;
+    background-color: var(--bg);
+    border: none;
+    border-radius: 5px;
+    color: var(--textColor);
+}
+
+.modalSubmit {
+    padding: 5px;
+    background-color: rgb(28, 150, 28);
+    color: var(--textColor);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-right: 10px;
+}
+
+.modalCancel {
+    padding: 5px;
+    background-color: #A93232;
+    color: var(--textColor);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}

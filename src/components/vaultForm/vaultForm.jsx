@@ -1,8 +1,8 @@
 "use client"
 import { useFieldArray, useForm } from "react-hook-form"
 import styles from "./vaultForm.module.css"
-import { useMutation } from "react-query"
-import { saveVault } from "@/lib/actions"
+import { useState } from "react";
+import { checkMaster } from "@/lib/actions";
 
 const getData = async (slug) => {
   const res = await fetch(`http://localhost:3000/api/vault/${slug}`);
@@ -10,12 +10,10 @@ const getData = async (slug) => {
   if(!res.ok) {
     throw new Error("Something wrong")
   }
-
   return res.json();
 }
 
 const postData = async(data) => {
-  console.log(data)
   try {
     const res = await fetch(`http://localhost:3000/api/vault/${data.userId}`, {
       method: 'POST',
@@ -29,15 +27,44 @@ const postData = async(data) => {
       throw new Error("Something wrong")
     }
 
-    return res.json();
+    console.log(res.json())
   } catch (error) {
     console.log(error)
   }
 };
 
 export const VaultForm = (id) => {
+  var errorMessage = ""
   const {userId} = id;
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [master, setMaster] = useState('');
+
+  const handleChange = (e) => {
+    setMaster(e.target.value);
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const validate = async (master,vault) => {
+    try {
+      var status = await checkMaster(userId,master);
+      if (status) {
+        postData({userId : userId, master : master, vault : vault});
+        closeModal();
+      } else {
+        errorMessage = "Nepareiza master parole!"
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const {control, register, handleSubmit} = useForm({
     defaultValues: {
       vault,
@@ -53,9 +80,6 @@ export const VaultForm = (id) => {
   return (
     <form className={styles.container} onSubmit={(e) => {
       e.preventDefault();
-      handleSubmit(({vault}) => {
-        console.log({vault});
-      })
     }}>
       {fields.map((field,index) => {
         return (
@@ -102,12 +126,25 @@ export const VaultForm = (id) => {
       <button className={styles.addBtn} onClick={() => append({website : "", username : "", password : ""})}>
         Pievienot
       </button>
-      {vault ? (<button className={styles.saveBtn} onClick={handleSubmit(({vault}) => {
-        postData({userId: userId, vault : vault})
-      })}>
+      <button className={styles.saveBtn} onClick={openModal}>
         Saglabāt
-      </button>) : (<div></div>)}
-      
+      </button>
+      {isModalOpen && (
+        <div className={styles.modal}>
+            <input 
+              type="password" 
+              id="master" 
+              placeholder="Master Parole"
+              value={master}
+              onChange={handleChange}
+              />
+            <button className={styles.modalSubmit} onClick={handleSubmit(({vault}) => {
+              validate(master,vault);
+            })} >Apstiprināt</button>
+          <button className={styles.modalCancel} onClick={closeModal}>Atcelt</button>
+          <span>{errorMessage}</span>
+      </div>
+      )}
     </form>
   )
 }

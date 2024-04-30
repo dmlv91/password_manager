@@ -96,30 +96,20 @@ export const createVault = async (userId,master) => {
     }
   };
 
-export const saveVault = async (id,encryptedVault) => {
+export const checkMaster = async (userId, master) => {
     try {
         dbConnect();
-        await User.updateOne({_id : id}, {$set : {vault : encryptedVault}});
-        return {success: true};
+        const user = await User.findById(userId);
+        var validated = await argon2.verify(user.master, master);
+        if (!validated) {
+            return false
+        }
+        return true
     } catch (error) {
         console.log(error)
-        return {error : "Glabātuves ievietošana datubāzē neveiksmīga!"}
+        return {error: "Validation failed"}
     }
 }
-
-export const deleteUser = async (formData) => {
-    const { id } = Object.fromEntries(formData);
-  
-    try {
-      dbConnect();
-      await User.findByIdAndDelete(id);
-      console.log(`User with id=${id} deleted from db`);
-      revalidatePath("/");
-    } catch (err) {
-      console.log(err);
-      return { error: "Something went wrong!" };
-    }
-  };
 
 export const login = async (previousState,formData) => {
     const {username,password} = Object.fromEntries(formData);
