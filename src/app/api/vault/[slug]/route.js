@@ -1,7 +1,6 @@
-import { decryptVault, encryptVault, generateKey } from "@/lib/crypto";
+import { encrypt, decrypt } from "@/lib/crypto";
 import { User } from "@/lib/models";
 import { dbConnect } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export const GET = async (request, {params}) => {
@@ -9,9 +8,9 @@ export const GET = async (request, {params}) => {
     try {
         dbConnect();
         const user = await User.findById(slug)
-        // const decryptedVault = await decryptVault(user.vault,user.vaultKey)
-        // console.log(decryptedVault)
-        return Response.json(user.vault);
+        const decryptedVault = await decrypt(user.vault, slug)
+        const res = JSON.parse(decryptedVault)
+        return NextResponse.json(res);
     } catch (err) {
         console.log(err)
         throw new Error("Failed to fetch vault data!")
@@ -19,14 +18,12 @@ export const GET = async (request, {params}) => {
 }
 
 export const POST = async (req) => {
-    const {userId, master, vault} = await req.json();
-
-    const key = await generateKey(userId);
-    const encryptedVault = await encryptVault(vault, key);
+    const {userId, vault} = await req.json();
+    const encryptedVault = await encrypt(JSON.stringify(vault), userId)
     try {
         dbConnect();
         await User.updateOne({_id : userId}, {$set: {vault: encryptedVault}})
-        return Response.json({success: true})
+        return Response.json({message: "Šifrēšana veiksmīga!"})
     } catch (err) {
         console.log(err)
         throw new Error("Failed to fetch vault data!")

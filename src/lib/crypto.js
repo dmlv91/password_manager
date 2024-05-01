@@ -1,37 +1,63 @@
-import argon2 from "argon2";
 import CryptoJS from "crypto-js";
 import { dbConnect } from "./utils";
 import { User } from "./models";
 
-export const generateKey = async (userId) => {
-    
-    const salt = CryptoJS.lib.WordArray.random(64);
+
+export const encrypt = async (vault, userId) => {
+    const salt = CryptoJS.lib.WordArray.random(16);
+    const iv = CryptoJS.lib.WordArray.random(16);
     try {
         dbConnect();
-        var user = await User.findById(userId);
-        const key = CryptoJS.PBKDF2(user?.master,salt, {
-            keySize: 512/32,
-            iterations: 1000
+        const user = User.findById(userId);
+        const master = user.master;
+        const secret = userId+master;
+        const key = CryptoJS.PBKDF2(secret,salt, {
+            keySize: 256/32,
+            iterations: 10000,
+            hasher: CryptoJS.algo.SHA256
         });
-        console.log(key.toString())
-        await User.updateOne({_id : userId},{$set : {vaultKey: JSON.stringify(key)}})
-        return JSON.stringify(key)
+        const encrypted = CryptoJS.AES.encrypt(vault,key, {iv:iv}).ciphertext;
+        const concatCipher = CryptoJS.lib.WordArray.create().concat(salt).concat(iv).concat(encrypted);
+        
+        return concatCipher.toString(CryptoJS.enc.Base64)
     } catch (error) {
-        console.log(error)   
+        console.log('encryption error: ', error)
     }
-
+  
 }
 
-export const encryptVault = async (vault, key) => {
-    const encryptedVault = CryptoJS.AES.encrypt(JSON.stringify(vault),key).toString();
-    console.log(typeof(encryptedVault))
-    return encryptedVault
-}
-
-export const decryptVault = async (vault,key) => {
-    console.log(vault)
-    console.log(key)
-    const bytes = CryptoJS.AES.decrypt(vault,key);
-    const decryptedVault = bytes.toString()
-    return decryptedVault
+export const decrypt = async (encryptedVault, userId) => {
+    const encrypted = CryptoJS.enc.Base64.parse(encryptedVault);
+    const salt_len = 16;
+    const iv_len = 16;
+    const salt = CryptoJS.lib.WordArray.create(
+        encrypted.words.slice(0, salt_len / 4 )
+      );
+    const iv = CryptoJS.lib.WordArray.create(
+        encrypted.words.slice(0 + salt_len / 4, (salt_len+iv_len) / 4 )
+      );
+    try {
+        dbConnect();
+        const user = User.findById(userId);
+        const master = user.master;
+        const secret = userId+master;
+        const key = CryptoJS.PBKDF2(secret,salt, {
+            keySize: 256/32,
+            iterations: 10000,
+            hasher: CryptoJS.algo.SHA256
+        });
+        const decrypted = CryptoJS.AES.decrypt(
+            {
+            ciphertext: CryptoJS.lib.WordArray.create(
+                encrypted.words.slice((salt_len+iv_len)/4)
+            )
+            },
+            key,
+            {iv:iv}
+        )
+        return decrypted.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+        console.log("Decryption error: ",error)
+    }
+    
 }

@@ -16,13 +16,13 @@ const PassGenerator = () => {
         const lower = new RegExp('(?=.*[a-z])');
         const upper = new RegExp('(?=.*[A-Z])');
         const number = new RegExp('(?=.*[0-9])');
-        const special = new RegExp('(?=.*[!()@#\$%\^&\*])');
+        const special = new RegExp('(?=.*[!() @#\$%\^&\*])');
         const length = new RegExp('(?=.{10,})')
         let charset = "";
         let newPassword = "";
         let passwordCompatbile = false;
  
-        if (useSymbols) charset += "!@#$%^&*()";
+        if (useSymbols) charset += "!@#$ %^&*()";
         if (useNumbers) charset += "0123456789";
         if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
         if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

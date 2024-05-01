@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "./utils";
 import { User } from "./models";
 import argon2 from "argon2";
-import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
 const login = async (credentials) => {
     try {
@@ -46,28 +45,6 @@ export const {
         })
     ],
     callbacks: {
-        async signIn({user, account ,profile}) {
-            if(account.provider == "github") {
-                dbConnect();
-                try {
-                    const user = await User.findOne({email: profile.email});
-
-                    if(!user) {
-                        const newUser = new User({
-                            username: profile.login,
-                            email: profile.email,
-                            image: profile.avatar_url,
-                        });
-
-                        await newUser.save();
-                    }
-                }catch(err){
-                    console.log(err)
-                    return false;
-                }
-            }
-            return true
-        },
         ...authConfig.callbacks,
         
     },

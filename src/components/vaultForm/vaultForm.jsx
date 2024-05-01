@@ -3,15 +3,7 @@ import { useFieldArray, useForm } from "react-hook-form"
 import styles from "./vaultForm.module.css"
 import { useState } from "react";
 import { checkMaster } from "@/lib/actions";
-
-const getData = async (slug) => {
-  const res = await fetch(`http://localhost:3000/api/vault/${slug}`);
-
-  if(!res.ok) {
-    throw new Error("Something wrong")
-  }
-  return res.json();
-}
+import Swal from "sweetalert2";
 
 const postData = async(data) => {
   try {
@@ -22,20 +14,18 @@ const postData = async(data) => {
       },
       body: JSON.stringify(data),
     });
-
+    var status = await res.json();
     if (!res.ok) {
       throw new Error("Something wrong")
     }
-
-    console.log(res.json())
+    Swal.fire(status.message)
   } catch (error) {
     console.log(error)
   }
 };
 
-export const VaultForm = (id) => {
-  var errorMessage = ""
-  const {userId} = id;
+export const VaultForm = ({props}) => {
+  const {userId,vault} = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [master, setMaster] = useState('');
 
@@ -58,7 +48,7 @@ export const VaultForm = (id) => {
         postData({userId : userId, master : master, vault : vault});
         closeModal();
       } else {
-        errorMessage = "Nepareiza master parole!"
+        Swal.fire("Nepareiza master parole!")
       }
     } catch (error) {
       console.log(error)
@@ -76,7 +66,6 @@ export const VaultForm = (id) => {
     name: "vault"
   });
 
-  var vault = getData(userId)
   return (
     <form className={styles.container} onSubmit={(e) => {
       e.preventDefault();
@@ -142,7 +131,6 @@ export const VaultForm = (id) => {
               validate(master,vault);
             })} >Apstiprināt</button>
           <button className={styles.modalCancel} onClick={closeModal}>Atcelt</button>
-          <span>{errorMessage}</span>
       </div>
       )}
     </form>

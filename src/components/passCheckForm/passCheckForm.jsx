@@ -1,18 +1,15 @@
 "use client"
 import styles from "./passCheckForm.module.css"
-import {useFormState} from "react-dom";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
-import Link from "next/link";
 
 
 const PassCheckForm = () => {
     const lower = new RegExp('(?=.*[a-z])');
     const upper = new RegExp('(?=.*[A-Z])');
     const number = new RegExp('(?=.*[0-9])');
-    const special = new RegExp('(?=.*[!()@#\$%\^&\*])');
+    const special = new RegExp('(?=.*[!() @#\$%\^&\*])');
     const length = new RegExp('(?=.{10,})')
     const [lowerValidated, setLowerValidated]=useState(false);
     const [upperValidated, setUpperValidated]=useState(false);

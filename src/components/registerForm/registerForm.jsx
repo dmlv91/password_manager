@@ -12,7 +12,7 @@ function RegisterForm() {
     const lower = new RegExp('(?=.*[a-z])');
     const upper = new RegExp('(?=.*[A-Z])');
     const number = new RegExp('(?=.*[0-9])');
-    const special = new RegExp('(?=.*[!@#\$%\^&\*])');
+    const special = new RegExp('(?=.*[!@# \$%\^&\*])');
     const length = new RegExp('(?=.{10,})')
     const [state,formAction] = useFormState(register,undefined);
     const [formData, setFormData] = useState({
