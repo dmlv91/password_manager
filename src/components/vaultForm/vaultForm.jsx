@@ -4,6 +4,7 @@ import styles from "./vaultForm.module.css"
 import { useState } from "react";
 import { checkMaster } from "@/lib/actions";
 import Swal from "sweetalert2";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const postData = async(data) => {
   try {
@@ -28,6 +29,8 @@ export const VaultForm = ({props}) => {
   const {userId,vault} = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [master, setMaster] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState([]);
+  const [vaultDecrypted, setVaultDecrypted] = useState(false);
 
   const handleChange = (e) => {
     setMaster(e.target.value);
@@ -39,6 +42,33 @@ export const VaultForm = ({props}) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  }
+
+  const showPassword = (index) => {
+    setPasswordVisible((prev) => {
+      const updateVisibility = [...prev];
+      updateVisibility[index] = !updateVisibility[index]
+      return updateVisibility;
+    });
+  };
+
+  const triggerDecryption = async () => {
+    Swal.fire({
+      title: 'Apstipriniet identitāti!',
+      input: 'password',
+      inputPlaceholder: 'Master parole',
+      showCancelButton: true,
+      confirmButtonText: 'Apstiprināt',
+      cancelButtonText: 'Atcelt',
+      preConfirm: async (value) => {
+        var status = await checkMaster(userId, value);
+        if (!status) {
+          setVaultDecrypted(false);
+          return false;
+        }
+        setVaultDecrypted(true);
+      }
+    });
   }
 
   const validate = async (master,vault) => {
@@ -67,72 +97,85 @@ export const VaultForm = ({props}) => {
   });
 
   return (
-    <form className={styles.container} onSubmit={(e) => {
-      e.preventDefault();
-    }}>
-      {fields.map((field,index) => {
-        return (
-          <div className={styles.vaultEntry} key={field.id}>
-            <div className={styles.inputWrapper}>
-              <div>
-                <label htmlFor="website">Vietne</label>
+    <>
+      {vaultDecrypted ? (
+
+        <form className={styles.container} onSubmit={(e) => {
+          e.preventDefault();
+        }}>
+          {fields.map((field,index) => {
+            return (
+              <div className={styles.vaultEntry} key={field.id}>
+                <div className={styles.inputWrapper}>
+                  <div>
+                    <label htmlFor="website">Vietne</label>
+                    <input 
+                      type="text"
+                      id={"website"+index}
+                      placeholder="Vietne"
+                      {...register(`vault.${index}.website`, {
+                        required: "Website is required",
+                      })}
+                      />
+                  </div>
+                  <div>
+                    <label htmlFor="username">Lietotājvārds</label>
+                    <input 
+                      type="text"
+                      id={"username"+index}
+                      placeholder="Lietotājvārds"
+                      {...register(`vault.${index}.username`, {
+                        required: "Username is required",
+                      })}
+                      />
+                  </div>
+                  <div>
+                    <label htmlFor="password">Parole</label>
+                    <input 
+                      type={passwordVisible[index] ? 'text' : 'password'}
+                      id={"password"+index}
+                      placeholder="Parole"
+                      {...register(`vault.${index}.password`, {
+                        required: "Password is required",
+                      })}
+                      />
+                  </div> 
+                  <button className={styles.remBtn} onClick={() => remove(index)}>-</button>
+                  <button className={styles.showBtn} onClick={(e) => {
+                    e.preventDefault();
+                    showPassword(index);
+                  }}>{passwordVisible[index] ? <FaEyeSlash/> : <FaEye/>}</button>
+                </div>
+                  </div>
+            );
+          })}
+          <button className={styles.addBtn} onClick={() => append({website : "", username : "", password : ""})}>
+            Pievienot
+          </button>
+          <button className={styles.saveBtn} onClick={openModal}>
+            Saglabāt
+          </button>
+          {isModalOpen && (
+            <div className={styles.modal}>
                 <input 
-                  type="url"
-                  id="website"
-                  placeholder="Vietne"
-                  {...register(`vault.${index}.website`, {
-                    required: "Website is required",
-                  })}
+                  type="password" 
+                  id="master" 
+                  placeholder="Master Parole"
+                  value={master}
+                  onChange={handleChange}
                   />
-              </div>
-              <div>
-                <label htmlFor="username">Lietotājvārds</label>
-                <input 
-                  type="text"
-                  id="username"
-                  placeholder="Lietotājvārds"
-                  {...register(`vault.${index}.username`, {
-                    required: "Username is required",
-                  })}
-                  />
-              </div>
-              <div>
-                <label htmlFor="password">Parole</label>
-                <input 
-                  type="text"
-                  id="password"
-                  placeholder="Parole"
-                  {...register(`vault.${index}.password`, {
-                    required: "Password is required",
-                  })}
-                  />
-              </div> 
-              <button className={styles.remBtn} onClick={() => remove(index)}>-</button>
-            </div>
-              </div>
-        );
-      })}
-      <button className={styles.addBtn} onClick={() => append({website : "", username : "", password : ""})}>
-        Pievienot
-      </button>
-      <button className={styles.saveBtn} onClick={openModal}>
-        Saglabāt
-      </button>
-      {isModalOpen && (
-        <div className={styles.modal}>
-            <input 
-              type="password" 
-              id="master" 
-              placeholder="Master Parole"
-              value={master}
-              onChange={handleChange}
-              />
-            <button className={styles.modalSubmit} onClick={handleSubmit(({vault}) => {
-              validate(master,vault);
-            })} >Apstiprināt</button>
-          <button className={styles.modalCancel} onClick={closeModal}>Atcelt</button>
-      </div>
-      )}
-    </form>
+                <button className={styles.modalSubmit} onClick={handleSubmit(({vault}) => {
+                  validate(master,vault);
+                })} >Apstiprināt</button>
+              <button className={styles.modalCancel} onClick={closeModal}>Atcelt</button>
+          </div>
+          )}
+        </form>
+        ) : ( <button className={styles.addBtn} onClick={(e) => {
+          e.preventDefault();
+          triggerDecryption();
+        }}>Atvērt glabātuvi</button>)
+      }
+    </>
   )
 }

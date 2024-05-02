@@ -11,13 +11,6 @@ const Home = () => {
                     Mana parole satur gan informāciju un mācību materiālus par drošām parolēm,
                     gan arī reģistrējot savu kontu ir iespējams iegūt piekļuvi pie drošas paroļu glabātuves.
                 </p>
-                <div className={styles.buttons}>
-                    <button className={styles.button}>Par mums</button>
-                    <button className={styles.button}>Kontakti</button>
-                </div>
-                <div className={styles.brands}>
-                    <Image src="/brands.jpg" alt="" fill className={styles.brandImg}/>
-                </div>
             </div>
            <div className={styles.imgContainer}>
                 <Image src="/passlock.jpg" alt="" fill className={styles.passImg}/>

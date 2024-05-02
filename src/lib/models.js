@@ -3,40 +3,37 @@ import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema(
     {
-        username:{
+        username: {
             type: String,
             required: true,
             unique: true,
             min: 3,
             max: 20
         },
-        email:{
+        email: {
             type: String,
             required: true,
             unique: true,
             max: 50
         },
-        password:{
+        password: {
             type: String,
             required: false,
         },
-        vault:{
+        vault: {
             type: String,
         },
-        master : {
+        master: {
             type: String,
             min: 10,
             required: false,
         },
-        img:{
+        img: {
             type: String,
         },
-        isAdmin:{
+        isAdmin: {
             type: Boolean,
             default:false,
-        },
-        salt:{
-            type: String,
         },
     },
     {timestamps: true}
@@ -44,23 +41,23 @@ const userSchema = new mongoose.Schema(
 
 const postSchema = new mongoose.Schema(
     {
-        title:{
+        title: {
             type: String,
             required: true,
         },
-        descr:{
+        descr: {
             type: String,
             required: true,
         },
-        img:{
+        img: {
             type: String,
         },
-        userId:{
-            type:String,
+        userId: {
+            type: String,
             required: true,
         },
-        slug:{
-            type:String,
+        slug: {
+            type: String,
             required: true,
             unique: true,
         }

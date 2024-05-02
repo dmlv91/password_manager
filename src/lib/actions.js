@@ -17,7 +17,7 @@ export const register = async (previousState, formData) => {
     }
 
     try {
-        dbConnect();
+        await dbConnect();
         const user = await User.findOne({username});
         const userEmail = await User.findOne({email});
         if(user){
@@ -50,7 +50,7 @@ export const addPost = async (previousState,formData) => {
     
     }
     try {
-        dbConnect();
+        await dbConnect();
         const newPost = new Post({
             title: formData.title,
             descr: formData.descr,
@@ -71,7 +71,7 @@ export const deletePost = async (formData) => {
     const { id } = Object.fromEntries(formData);
   
     try {
-      dbConnect();
+      await dbConnect();
       await Post.findByIdAndDelete(id);
       console.log(`Post with id=${id} deleted from db`);
       revalidatePath("/blog");
@@ -87,7 +87,7 @@ export const createVault = async (userId,master) => {
     const vault = ""
     const masterHash = await argon2.hash(master)
     try {
-      dbConnect();
+      await dbConnect();
       await User.updateOne({_id : id}, {$set : {master : masterHash, vault : vault}});
       revalidatePath("/vault");
     } catch (err) {
@@ -98,7 +98,7 @@ export const createVault = async (userId,master) => {
 
 export const checkMaster = async (userId, master) => {
     try {
-        dbConnect();
+        await dbConnect();
         const user = await User.findById(userId);
         var validated = await argon2.verify(user.master, master);
         if (!validated) {

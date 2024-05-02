@@ -7,7 +7,7 @@ export const encrypt = async (vault, userId) => {
     const salt = CryptoJS.lib.WordArray.random(16);
     const iv = CryptoJS.lib.WordArray.random(16);
     try {
-        dbConnect();
+        await dbConnect();
         const user = User.findById(userId);
         const master = user.master;
         const secret = userId+master;
@@ -37,7 +37,7 @@ export const decrypt = async (encryptedVault, userId) => {
         encrypted.words.slice(0 + salt_len / 4, (salt_len+iv_len) / 4 )
       );
     try {
-        dbConnect();
+        await dbConnect();
         const user = User.findById(userId);
         const master = user.master;
         const secret = userId+master;

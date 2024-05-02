@@ -3,7 +3,7 @@ import { dbConnect } from "./utils"
 
 export const getPosts = async () => {
     try{
-        dbConnect();
+        await dbConnect();
         const posts = await Post.find()
         return posts;
     } catch(err){
@@ -13,7 +13,7 @@ export const getPosts = async () => {
 
 export const getPost = async (slug) => {
     try{
-        dbConnect();
+        await dbConnect();
         const post = await Post.findOne({slug});
         return post;
     } catch(err){
@@ -21,19 +21,9 @@ export const getPost = async (slug) => {
     }
 }
 
-export const getUsers = async () => {
-    try{
-        dbConnect();
-        const users = await User.find()
-        return users;
-    } catch(err){
-        throw new Error("Failed to fetch posts!")
-    }
-}
-
 export const getUser = async (id) => {
     try{
-        dbConnect();
+        await dbConnect();
         const user = await User.findById(id);
         return user;
     } catch(err){
@@ -43,7 +33,7 @@ export const getUser = async (id) => {
 
 export const getVault =async(id) => {
     try {
-        dbConnect();
+        await dbConnect();
         const user = await User.findById(id);
         return user.vault;
     } catch (error) {

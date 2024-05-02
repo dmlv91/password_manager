@@ -1,5 +1,4 @@
 import styles from './blog.module.css'
-import Image from 'next/image'
 import PostCard from '@/components/postCard/PostCard'
 
 const getData = async () => {

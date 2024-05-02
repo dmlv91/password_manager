@@ -37,19 +37,22 @@
 }
 
 .remBtn {
-    padding: 10px;
+    padding: 5px;
     background-color: #A93232;
     color: var(--textColor);
     font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 20px;
+    margin-right: 5px;
+    margin-top: 10px;
 }
 
 .addBtn,
-.saveBtn {
-    padding: 5px;
+.saveBtn,
+.showBtn {
+    padding: 7px;
     background-color: var(--btn);
     color: var(--textColor);
     font-weight: bold;
@@ -57,7 +60,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .modal {

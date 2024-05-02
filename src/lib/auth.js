@@ -6,7 +6,7 @@ import argon2 from "argon2";
 import { authConfig } from "./auth.config";
 const login = async (credentials) => {
     try {
-        dbConnect();
+        await dbConnect();
         const user = await User.findOne({username: credentials.username})
 
         if(!user) {
