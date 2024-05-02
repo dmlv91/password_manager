@@ -2,7 +2,8 @@ import styles from './blog.module.css'
 import PostCard from '@/components/postCard/PostCard'
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/blog", {cache: 'no-store'});
+  const res = await fetch(`${process.env.LOCALHOST}/api/blog`, {cache: 'no-store'});
+
 
   if(!res.ok) {
     throw new Error("Something wrong")

@@ -8,7 +8,7 @@ import PassCheckForm from "@/components/passCheckForm/passCheckForm";
 import PassGenerator from "@/components/passGenerator/passGenerator";
 
 const getData = async (slug) => {
-  const res = await fetch(`http://localhost:3000/api/vault/${slug}`);
+  const res = await fetch(`${process.env.LOCALHOST}/api/vault/${slug}`);
 
   if(!res.ok) {
     throw new Error("Something wrong")
