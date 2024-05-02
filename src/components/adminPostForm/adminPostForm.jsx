@@ -26,6 +26,7 @@ const AdminPostForm = ({userId}) => {
       setFormData({...formData, [name]: value, slug: slug});
     }
 
+    //transform image file to a base64 string for easier data handling and storage.
     const handleFileChange = (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -40,6 +41,7 @@ const AdminPostForm = ({userId}) => {
         formAction(formData);
     };
 
+    //autogenerate path to blog entry depending on its title.
     const generateSlug = (title) => {
         return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     };

@@ -1,6 +1,8 @@
 import { Post, User } from "./models"
 import { dbConnect } from "./utils"
 
+//Handle main data requests from database.
+
 export const getPosts = async () => {
     try{
         await dbConnect();

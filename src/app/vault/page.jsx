@@ -17,12 +17,17 @@ const getData = async (slug) => {
 }
 
 async function PassVault() {
-  
+  var vault = ""
   const session = await auth();
   const userId = session.user.id;
   const user = await getUser(userId);
   const master = user?.master;
-  const vault = await getData(userId)
+
+  //if user does not have the master password it does not have the vault as well
+  // thus data fetch is unnecessary.
+  if (master) {
+    vault = await getData(userId)
+  }
 
   return (
     <div className={styles.container}>

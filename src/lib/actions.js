@@ -1,10 +1,11 @@
 "use server";
 import { signIn, signOut } from "./auth";
+import { checkHash, genHash } from "./crypto";
 import { Post, User } from "./models";
 import { dbConnect } from "./utils";
-import argon2 from "argon2";
 import {revalidatePath} from "next/cache";
 
+//Various user actions all in one place
 
 export const register = async (previousState, formData) => {
     const {username,email,password, img} = formData;
@@ -27,7 +28,7 @@ export const register = async (previousState, formData) => {
         if (userEmail) {
             return {error: "Lietotājs ar šādu e-pastu ir reģistrēts!"}
         }
-        const hashedPass = await argon2.hash(password)
+        const hashedPass = await genHash(password)
         const newUser = new User({
             username,
             email,
@@ -85,7 +86,7 @@ export const deletePost = async (formData) => {
 export const createVault = async (userId,master) => {
     const id = userId.userId
     const vault = ""
-    const masterHash = await argon2.hash(master)
+    const masterHash = await genHash(master)
     try {
       await dbConnect();
       await User.updateOne({_id : id}, {$set : {master : masterHash, vault : vault}});
@@ -100,7 +101,7 @@ export const checkMaster = async (userId, master) => {
     try {
         await dbConnect();
         const user = await User.findById(userId);
-        var validated = await argon2.verify(user.master, master);
+        var validated = await checkHash(user.master, master);
         if (!validated) {
             return false
         }

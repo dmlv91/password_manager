@@ -73,6 +73,7 @@ function RegisterForm() {
       setFormData({...formData, [name]: value});
     }
 
+    //transform image file to a base64 string for easier data handling and storage.
     const handleFileChange = (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();

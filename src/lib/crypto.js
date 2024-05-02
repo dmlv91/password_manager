@@ -1,7 +1,12 @@
 import CryptoJS from "crypto-js";
 import { dbConnect } from "./utils";
 import { User } from "./models";
+import argon2 from "argon2";
 
+//This implementation of a symmetric encryption/decryption 
+//has originally been made by Halan Pinheiro and described in his dev.to blog entry.
+//I have included userId and master password to produce a long and unique secret password
+//that is being used as one of the base parameters in the key derivation function.
 
 export const encrypt = async (vault, userId) => {
     const salt = CryptoJS.lib.WordArray.random(16);
@@ -60,4 +65,17 @@ export const decrypt = async (encryptedVault, userId) => {
         console.log("Decryption error: ",error)
     }
     
+}
+
+
+//handle login and master password hashing and verifying procedures.
+//Hashing operations are done with argon2id algorithm.
+export const genHash = async (value) => {
+    const hashedValue = await argon2.hash(value);
+    return hashedValue
+}
+
+export const checkHash = async (hashedValue, userInput) => {
+    const validated = await argon2.verify(hashedValue,userInput);
+    return validated
 }
