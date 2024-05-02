@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const postData = async(data) => {
   try {
-    const res = await fetch(`${process.env.LOCALHOST}/api/vault/${data.userId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_LOCALHOST}/api/vault/${data.userId}`, {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
