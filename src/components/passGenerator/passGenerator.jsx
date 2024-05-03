@@ -86,7 +86,6 @@ const PassGenerator = () => {
         document.body.removeChild(el);
         setSuccessMessage("Parole nokopēta!");
         setTimeout(() => setSuccessMessage(""), 2000);
-        // Hide message after 2 seconds
     };
  
     return (

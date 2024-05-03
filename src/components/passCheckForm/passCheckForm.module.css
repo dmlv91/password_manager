@@ -46,3 +46,23 @@ margin-right: 10px;
 color: green;
 margin-right: 10px;
 }
+
+.veryWeak {
+    color: red;
+    font-weight: bold;
+}
+
+.weak {
+    color: rgb(182, 119, 3);
+    font-weight: bold;
+}
+
+.secure {
+    color: green;
+    font-weight: bold;
+}
+
+.verySecure {
+    color: darkgreen;
+    font-weight: bold;
+}
