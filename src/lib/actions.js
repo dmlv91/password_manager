@@ -120,8 +120,7 @@ export const login = async (previousState,formData) => {
         await signIn("credentials",{username,password});
     }catch(err) {
         console.log(err)
-
-        if(err.message.includes("CredentialsSignin")) {
+        if(err.message.includes("credentialssignin")) {
             return {error: "Nepareizs lietotājvārds vai parole!"}
         }
 

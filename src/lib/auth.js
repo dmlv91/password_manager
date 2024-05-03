@@ -4,6 +4,7 @@ import { dbConnect } from "./utils";
 import { User } from "./models";
 import { authConfig } from "./auth.config";
 import { checkHash } from "./crypto";
+
 const login = async (credentials) => {
     try {
         await dbConnect();
