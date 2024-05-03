@@ -64,7 +64,7 @@ const PassCheckForm = () => {
         case entropy >= 36 && entropy < 60:
           level = "Vāja";
           break;
-        case entropy >= 60 && entropy < 119:
+        case entropy >= 60 && entropy < 120:
           level = "Droša";
           break;
         case entropy >= 120:
