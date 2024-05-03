@@ -61,6 +61,7 @@ export const addPost = async (previousState,formData) => {
         });
         await newPost.save();
         revalidatePath("/admin")
+        revalidatePath("/blog")
         return {success: true};
     }catch(err) {
         console.log(err)
