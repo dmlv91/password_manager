@@ -63,6 +63,17 @@
     margin-top: 12px;
 }
 
+.openBtn {
+    padding: 15px;
+    background-color: var(--btn);
+    color: var(--textColor);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
 .modal {
     margin-top: 10px;
 }

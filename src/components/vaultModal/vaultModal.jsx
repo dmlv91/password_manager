@@ -26,7 +26,7 @@ const VaultModal = (userId) => {
     };
   return (
     <div className={styles.container}>
-        <button className={styles.btn} onClick={handleAddVaultClick}>ADD VAULT</button>
+        <button className={styles.btn} onClick={handleAddVaultClick}>Jauna glabātuve</button>
         {isModalOpen && (
             <div className={styles.modal}>
                 <div className={styles.modalContent}>
@@ -34,7 +34,7 @@ const VaultModal = (userId) => {
                         <FaRegWindowClose/>
                     </span>
                     <form onSubmit={handleSubmit}>
-                    <label htmlFor="masterPassword">Master Password:</label>
+                    <label htmlFor="masterPassword">Izveidot Master Paroli:</label>
                     <input
                         type="text"
                         id="masterPassword"

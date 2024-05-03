@@ -171,7 +171,7 @@ export const VaultForm = ({props}) => {
           </div>
           )}
         </form>
-        ) : ( <button className={styles.addBtn} onClick={(e) => {
+        ) : ( <button className={styles.openBtn} onClick={(e) => {
           e.preventDefault();
           triggerDecryption();
         }}>Atvērt glabātuvi</button>)

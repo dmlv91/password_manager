@@ -60,8 +60,8 @@ export const addPost = async (previousState,formData) => {
             img: uploadImg,
         });
         await newPost.save();
+        revalidatePath("/admin")
         return {success: true};
-        revalidatePath("/blog")
     }catch(err) {
         console.log(err)
         return {error: "Kļūda!"};

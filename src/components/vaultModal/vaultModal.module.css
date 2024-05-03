@@ -44,6 +44,7 @@
 .modalContent label {
     flex: 1;
     font-size: 20px;
+    margin-right: 20px;
 }
 
 .modalContent input {

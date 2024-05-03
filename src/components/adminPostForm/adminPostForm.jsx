@@ -21,9 +21,11 @@ const AdminPostForm = ({userId}) => {
       var slug;
       if (name == "title") {
           const autoSlug = generateSlug(value)
-            slug = autoSlug
+          slug = autoSlug
+          setFormData({...formData, [name] : value, slug: slug});
+      } else {
+        setFormData({...formData, [name]: value});
       }
-      setFormData({...formData, [name]: value, slug: slug});
     }
 
     //transform image file to a base64 string for easier data handling and storage.
@@ -45,7 +47,6 @@ const AdminPostForm = ({userId}) => {
     const generateSlug = (title) => {
         return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     };
-
   return (
     <form onSubmit={handleSubmit} className={styles.container}>
         <h1>Pievienot jaunu ierakstu</h1>
@@ -53,7 +54,7 @@ const AdminPostForm = ({userId}) => {
         <input type="text" name="title" placeholder="Virsraksts" onChange={handleInputChange}/>
         <input type="text" name="slug" placeholder="URL" value={formData.slug} onChange={handleInputChange}/>
         <input type="file" name="img" accept="image/*" onChange={handleFileChange}/>
-        <textarea type="text" name="descr" placeholder="Apraksts" rows={10} onChange={handleInputChange}/>
+        <textarea type="text" name="descr" placeholder="Apraksts" value={formData.descr} rows={10} onChange={handleInputChange}/>
         <button>Ievietot</button>
         {state && state.error}
     </form>
