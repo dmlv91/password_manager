@@ -41,7 +41,7 @@ const VaultModal = (userId) => {
                         value={masterPassword}
                         onChange={(e) => setMasterPassword(e.target.value)}
                     />
-                    <button className={styles.btn} type="submit">Submit</button>
+                    <button className={styles.btn} type="submit">Saglabāt</button>
                     </form>
                 </div>
                 <h3>Padoms: Izmantojiet drošu paroli, taču atšķirīgu no jūsu konta paroles!</h3>
