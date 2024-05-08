@@ -4,6 +4,7 @@ import { addPost } from "@/lib/actions";
 import styles from "./adminPostForm.module.css"
 import {useFormState} from "react-dom"
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const AdminPostForm = ({userId}) => {
 
@@ -31,16 +32,24 @@ const AdminPostForm = ({userId}) => {
     //transform image file to a base64 string for easier data handling and storage.
     const handleFileChange = (e) => {
       const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-          setFormData({ ...formData, img: reader.result });
-      };
-      reader.readAsDataURL(file);
+      if (file && file.type.startsWith('image')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setFormData({ ...formData, img: reader.result });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        Swal.fire("Pievienot atļauts tikai attēlus!")
+      }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        formAction(formData);
+        if (formData.img) {
+          formAction(formData);
+        } else {
+          Swal.fire("Nederīgs attēla formāts, nav iespējams izveidot ierakstu!")
+        }
     };
 
     //autogenerate path to blog entry depending on its title.

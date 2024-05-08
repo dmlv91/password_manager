@@ -102,7 +102,7 @@ function RegisterForm() {
     <form className={styles.form} onSubmit={handleSubmit}>
         <input type='text' placeholder='Lietotājvārds' name='username' onChange={handleInputChange}/>
         <input type='email' placeholder='E-pasts' name='email'onChange={handleInputChange}/>
-        <input type="file" name="img" accept="image/*" onChange={handleFileChange}/>
+        <input type="file" name="img" accept=".jpg, .jpeg, .png, .gif" onChange={handleFileChange}/>
         <input type='password' placeholder='Parole' name='password'onChange={handleInputChange}/>
         <input type='password' placeholder='Parole atkārtoti' name='passwordRepeat' onChange={handleInputChange}/>
         <main className={styles.tracker}>

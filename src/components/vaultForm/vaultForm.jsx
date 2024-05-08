@@ -64,6 +64,7 @@ export const VaultForm = ({props}) => {
         var status = await checkMaster(userId, value);
         if (!status) {
           setVaultDecrypted(false);
+          Swal.showValidationMessage('Nepareiza master parole!')
           return false;
         }
         setVaultDecrypted(true);
@@ -75,7 +76,7 @@ export const VaultForm = ({props}) => {
     try {
       var status = await checkMaster(userId,master);
       if (status) {
-        postData({userId : userId, master : master, vault : vault});
+        postData({userId : userId, vault : vault});
         closeModal();
       } else {
         Swal.fire("Nepareiza master parole!")
