@@ -18,14 +18,13 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: false,
+            required: true,
         },
         vault: {
             type: String,
         },
         master: {
             type: String,
-            min: 10,
             required: false,
         },
         img: {
